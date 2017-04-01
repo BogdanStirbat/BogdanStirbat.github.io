@@ -4,12 +4,4 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
-
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jekyll" %} /
-[minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+I am a software engineer located in Bucharest, Romania. Graduated University Politechnica of Bucharest, [Faculty of Automatic Control and Computer Science](http://www.upb.ro/en/the-faculty-of-automatic-control-and-computer-science.html) in 2013 (Bachelor’s Degree) and in 2015 (Master's Degree). You can find out more about me on [Linkedin](https://www.linkedin.com/in/bogdan-stirbat-486a286a/).

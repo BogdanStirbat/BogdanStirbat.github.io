@@ -1,6 +1,5 @@
 ---
 layout: post
-comments: true
 title:  "First blog article (using Jekyll and GitHub pages)"
 date:   2017-04-01 15:39:18 +0300
 categories: jekyll update

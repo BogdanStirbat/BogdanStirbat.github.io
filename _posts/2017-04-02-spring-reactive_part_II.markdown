@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "Reactive Programming in Spring Framework (part II)"
-date:   2017-04-02 18:25:18 +0300
+date:   2017-04-04 18:25:18 +0300
 categories: jekyll update
 ---
 In the previous [blog post](spring-reactive.html), some general facts about Reactive Programming and Spring support for this paradigm.

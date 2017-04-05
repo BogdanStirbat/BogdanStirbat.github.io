@@ -21,4 +21,4 @@ Spring team made an excellent job in documenting the new Reactive features. Spri
 
 I expect the visitors to read the specified articles. It would be impractical to repeat the same information here.
 
-In the next [blog post](spring-reactive_part_II), I will describe some experiments with Spring WebFlux framework.
+In the next [blog post]({% link _posts/2017-04-04-spring-reactive_part_II.markdown %}), I will describe some experiments with Spring WebFlux framework.

@@ -5,7 +5,7 @@ title:  "Reactive Programming in Spring Framework (part II)"
 date:   2017-04-04 18:25:18 +0300
 categories: jekyll update
 ---
-In the previous [blog post](spring-reactive.html), some general facts about Reactive Programming and Spring support for this paradigm.
+In the previous [blog post]({% link _posts/2017-04-02-spring-reactive.markdown %}), some general facts about Reactive Programming and Spring support for this paradigm.
 
 Here, I will present some experiments with this framework. In this [GitHub repository](https://github.com/BogdanStirbat/reactive-demo) there are 4 projects:
 * demo-server

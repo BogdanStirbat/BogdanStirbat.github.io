@@ -25,7 +25,7 @@ There are 2 types of Maven dependencies: direct and transitive. If, a pom.xml in
     <version>5.0.4.RELEASE</version>
 </dependency>
 {% endhighlight %}
-then spring-web becomes a direct dependency. As we can [see](https://mvnrepository.com/artifact/org.springframework/spring-web/5.0.4.RELEASE), spring-web also depends on [jackson-databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind/2.9.4). Since spring-web declared this as a dependency, Maven will automatically download and include in out application jackson-databind as well; this is a transitive dependency. So, direct dependencies are directly included by the end applications, and transitive dependencies are direct dependency's dependencies. [jackson-databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind/2.9.4) depends on [jackson-core](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core/2.9.4). So, jackson-core is a transitive dependency for our application as well. As we can see, we have a graph of dependencies, of arbitrary length.
+then spring-web becomes a direct dependency. As we can [see](https://mvnrepository.com/artifact/org.springframework/spring-web/5.0.4.RELEASE), spring-web also depends on [jackson-databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind/2.9.4). Since spring-web declared this as a dependency, Maven will automatically download and include in our application jackson-databind as well; this is a transitive dependency. So, direct dependencies are directly included by the end applications, and transitive dependencies are direct dependency's dependencies. [jackson-databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind/2.9.4) depends on [jackson-core](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core/2.9.4). So, jackson-core is a transitive dependency for our application as well. As we can see, we have a graph of dependencies, of arbitrary length.
 
 
 ### Transitive dependencies with conflicting versions
@@ -34,11 +34,11 @@ In this [Github repository](https://github.com/BogdanStirbat/transitive-dependen
 
 ![Project structure]({{ "/assets/maven-transitive-dependencies/transitive-dependency-study.png" | absolute_url }})
 
-Above image was created with [draw.io](https://www.draw.io/). The repository consists of 4 Maven projects:
+Above image was created with [draw.io](https://www.draw.io/). As can be seen from the picture above, this project is a case study for a conflicting transitive dependency. The repository consists of 4 Maven projects:
 
 [message-library](https://github.com/BogdanStirbat/transitive-dependency-study/tree/master/message-library)
 
-The library has, for demo purposes, the following class:
+This library exists, in my local Maven repository, in 2 versions. The library has, for demo purposes, the following class:
 {% highlight java %}
 package com.bstirbat.transitive.dependency.study;
 
@@ -51,9 +51,9 @@ public class MessageLibrary {
 
 {% endhighlight %}
 
-Locally, I changed the project's version to `1.0-SNAPSHOT`, then I modified the return value: `message-version-2`. I recompiled the project, thus in my local Maven repository there are 2 versions of this library:
+Locally, I changed the project's version to `2.0-SNAPSHOT`, then I modified the return value: `message-version-2`. I recompiled the project, thus in my local Maven repository there are 2 versions of this library:
 {% highlight bash %}
-transitive-dependency-study/message-web-application$ ls ~/.m2/repository/com/bstirbat/transitive/dependency/study/message-library/
+ls ~/.m2/repository/com/bstirbat/transitive/dependency/study/message-library/
 1.0-SNAPSHOT  2.0-SNAPSHOT  maven-metadata-local.xml
 {% endhighlight %}
 
@@ -96,15 +96,15 @@ public class MessageController {
 
 {% endhighlight %}
 
-As you probably guess, calling method `getMessageV1()` will return `message-version-1`, and calling method `getMessageV2()` will return `message-version-2`. If we build this spring application and run it, we will have a surprise: both `getMessageV1()` and `getMessageV2()` return `message-version-1`.
+As you probably assume, calling method `getMessageV1()` will return `message-version-1` (since message-service-v1 depends on message-library version 1), and calling method `getMessageV2()` will return `message-version-2` (since message-service-v2 depends on message-library version 2). If we build this spring application and run it, we will have a surprise: both `getMessageV1()` and `getMessageV2()` return `message-version-1`.
 
 
 ### What happened?
-[message-service-v1](https://github.com/BogdanStirbat/transitive-dependency-study/tree/master/message-service-v1) and [message-service-v2](https://github.com/BogdanStirbat/transitive-dependency-study/tree/master/message-service-v2) both depend on [message-library](https://github.com/BogdanStirbat/transitive-dependency-study/tree/master/message-library), but with different versions. JVM can only load a specific version of a library. Thus, the other version will be ignore, and projects depending on a specific library version will receive a different library version. This can be a big problem: what if logic changed between versions, or what if methods or classes were deleted, and one of our library calls a non-existing method? Meet [ClassNotFoundException](https://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html), [MethodNotFoundException](https://docs.oracle.com/javaee/7/api/javax/el/MethodNotFoundException.html).
+[message-service-v1](https://github.com/BogdanStirbat/transitive-dependency-study/tree/master/message-service-v1) and [message-service-v2](https://github.com/BogdanStirbat/transitive-dependency-study/tree/master/message-service-v2) both depend on [message-library](https://github.com/BogdanStirbat/transitive-dependency-study/tree/master/message-library), but with different versions. JVM can only load a specific version of a library. Maven has no other choice but to include the library only once, with a specific version. This is not a Maven limitation, but a JVM limitation. As a side note, Java 9's module system fixed this problem, but this discussion is beyond the scope of this blog article. Thus, message-library will be included only once, with a version; the other version will be ignored, and projects depending on a specific library version will receive a different library version. This can be a big problem: what if logic changed between versions, or what if methods or classes were deleted, and one of our library calls a non-existing method? Meet a class of exception that occur at runtime: [ClassNotFoundException](https://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html), [MethodNotFoundException](https://docs.oracle.com/javaee/7/api/javax/el/MethodNotFoundException.html). Unfortunately, this problems are not visible at compile time. It could even be possible that the excluded version has some additional methods and classes, missing in the included version. The compiler will not detect any problem. The issues will be detected in integration tests, if we are lucky; else, the frustrated user will experience them.
 
-The algorithm that describes which version wins can be found [here](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Transitive_Dependencies). Some strategies for solving such problems can be found [here](http://books.sonatype.com/mvnref-book/reference/pom-relationships-sect-project-dependencies.html#pom-relationships-sect-conflict).
+How does Maven picks a specific version? The algorithm that describes which version wins can be found [here](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Transitive_Dependencies).
 
-In real-life, we can have projects with hundreds of library dependencies, so losing track of them can be quite easy. How can we detect such conflicts?
+In real-life, we can have projects with hundreds of library dependencies, so losing track of them can be quite easy. How can we easily detect such conflicts?
 
 
 ### Solution
@@ -153,6 +153,11 @@ and
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
 {% endhighlight %}
+
+Now, the nasty problems are detected while building the project. The displayed messages are very informative, we can see what libraries have conflicting versions, and the whole dependency graph.
+
+
+Now, we have to solve the problem. There are many solutions, some strategies for solving such problems can be found [here](http://books.sonatype.com/mvnref-book/reference/pom-relationships-sect-project-dependencies.html#pom-relationships-sect-conflict).
 
 
 <br>

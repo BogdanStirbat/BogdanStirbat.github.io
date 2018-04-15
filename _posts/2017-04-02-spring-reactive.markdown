@@ -1,6 +1,5 @@
 ---
 layout: post
-comments: true
 title:  "Reactive Programming in Spring Framework"
 date:   2017-04-02 12:25:18 +0300
 categories: jekyll update

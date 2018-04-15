@@ -1,6 +1,5 @@
 ---
 layout: post
-comments: true
 title:  "Introduction to Docker for Java Developers"
 date:   2018-01-20 12:25:18 +0300
 categories: jekyll update

@@ -1,6 +1,5 @@
 ---
 layout: post
-comments: true
 title:  "Maven transitive dependencies with conflicting versions"
 date:   2018-04-01 18:25:18 +0300
 categories: jekyll update

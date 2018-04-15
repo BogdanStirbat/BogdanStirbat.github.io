@@ -1,6 +1,5 @@
 ---
 layout: post
-comments: true
 title:  "First blog article (using Jekyll and GitHub pages)"
 date:   2017-04-01 15:39:18 +0300
 categories: jekyll update
@@ -22,3 +21,5 @@ So, in the end, I used GitHub pages with Jekyll. After playing a little with [Je
 I bought the domain from [Namecheap](https://www.namecheap.com/). Contrary to what the name might suggest, they offer high quality services: the platform is fast, intuitive. Also, the domain was cheap, about 20 dollars (near 95 RON) for a 2 year registration.
 
 After setting up a GitHub pages repository with a Jekyll blog, all I had to do was to transfer nameservers from NameCheap to CloudFlare, to set up the free SSL certificate from CloudFlare, and to configure the GitHub repository to use a custom domain. With excellent help articles from [GitHub](https://help.github.com/articles/using-a-custom-domain-with-github-pages/) and [CloudFlare](https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/), and generosity of other bloggers describing their [experience](http://davidensinger.com/2014/04/transferring-the-dns-from-namecheap-to-cloudflare-for-github-pages/), everything went nice and smooth.
+
+Edit (2018.04.15): To be GDPR compliant, I removed Disqus comments plugin. For now, if you have comments and suggestions, you can join the discussion [here](https://github.com/BogdanStirbat/BogdanStirbat.github.io/issues).

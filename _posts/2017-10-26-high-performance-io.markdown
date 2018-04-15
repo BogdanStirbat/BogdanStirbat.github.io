@@ -1,6 +1,5 @@
 ---
 layout: post
-comments: true
 title:  "High performance I/O bound applications in Java"
 date:   2017-10-26 22:25:18 +0300
 categories: jekyll update

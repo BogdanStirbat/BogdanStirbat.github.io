@@ -1,6 +1,5 @@
 ---
 layout: post
-comments: true
 title:  "Maven and Gradle: a comparison"
 date:   2017-12-10 14:23:18 +0300
 categories: jekyll update

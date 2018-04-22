@@ -31,7 +31,7 @@ then spring-web becomes a direct dependency. As we can [see](https://mvnreposito
 
 In this [Github repository](https://github.com/BogdanStirbat/transitive-dependency-study) I created a Maven project with the following structure:
 
-![Project structure]({{ "/assets/maven-transitive-dependencies/transitive-dependency-study.png" | absolute_url }})
+![Project structure]({{ "/assets/2018-04-01-maven-transitive-dependencies/transitive-dependency-study.png" | absolute_url }})
 
 Above image was created with [draw.io](https://www.draw.io/). As can be seen from the picture above, this project is a case study for a conflicting transitive dependency. The repository consists of 4 Maven projects:
 

@@ -11,7 +11,12 @@ In Java world, [Hibernate](http://hibernate.org/orm/documentation/5.3/) is a wel
 
 
 ### Hibernate caching
-Hibernate supports several levels of caching: first level cache (enabled by default), second level cache, query cache (same as first level cache). Before discussing these levels of cache, we need to discuss a little about Hibernate architecture. Full Hibernate documentation can be found [here](http://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html); the relevant information is the existence of a class, `Session`, or `EntityManager`, it's JPA equivalent. Database access is done using this class.
+Hibernate supports several levels of caching: first level cache (enabled by default), second level cache, query cache (same as first level cache). Before discussing these levels of cache, we need to discuss a little about Hibernate architecture.
+
+![Project structure]({{ "/assets/2018-08-05-apache-ignite-hibernate-l2-cache/Hibernate_cache_architecture.png" | absolute_url }})
+
+
+Full Hibernate documentation can be found [here](http://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html); the relevant information is the existence of a class, `Session`, or `EntityManager`, it's JPA equivalent. Database access is done using this class.
 
 Example of a database call using Hibernate (taken from [official documentation](http://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html)):
 
@@ -26,7 +31,7 @@ Photo photo = entityManager.createQuery(
 
 The `Session` object is a single-threaded, short-lived object, usually associated with a session (for example a web session, mapping a web request). So, there is a Session per each web request. The first level cache is associated with this object. Once a item is retrieved from the DB, it is stored here. Next time the same object is requested in the same web session, it is retrieved from the first level cache and not from DB. But if a different web request arrives, or the same web web request arrives later, database will be called again. To prevent this behavior, the concept of second level cache was born.
 
-While the first level cache is implemented by Hibernate internally, the second level cache is optional, and is provided by a different solution. Hibernate needs to be configured to use a second level cache provider, and to use second level cache; later in this article, it will be explained how.
+While the first level cache is implemented by Hibernate internally, the second level cache is optional, and is provided by a different solution. Hibernate needs to be configured to use a second level cache provider, and to use second level cache; later in this article, it will be explained how. On top of second level cache, a query cache can be added. Query cache is optional, and depends on second level cache.
 
 A demo application was created for illustrating the concepts described in this article.
 
@@ -38,6 +43,10 @@ The demo application, named ElectronicStore, manages an electronic store. I's a 
 ![Project structure]({{ "/assets/2018-08-05-apache-ignite-hibernate-l2-cache/db_diagram.png" | absolute_url }})
 
 The database models an electronic store. The store has several branches, saved in the stores table (which id, city, address). Items to be sold are saved in the items table (having an id, serial number, name, description). Each item can have a review, saved in the reviews table (which id, item_id (item for which the review is created), nr_stars, comment). To indicate that an item can be found in a specific branch, a new table was created, items_location (having an id, an item_id (the item placed in the branch), store_id (the branch where the item is placed)).
+
+There cannot be an electronic store without a logo, so here we have:
+
+![Project structure]({{ "/assets/2018-08-05-apache-ignite-hibernate-l2-cache/Electronic_Store_Logo.png" | absolute_url }})
 
 
 ### Project setup
@@ -293,7 +302,7 @@ java -jar target/ElectronicStore.jar port:8081
 
 We started two instances of ElectronicStore, one running on 8080 and the other on 8081. Without any other configuration, each instance will have it's own Apache Ignite, running in server mode, non-communicating. So cache will not be shared between instances. This is how the cluster looks like now:
 
-![Project structure]({{ "/assets/2018-08-05-apache-ignite-hibernate-l2-cache/electronic_store_server_per_instance.png" | absolute_url }})
+![Project structure]({{ "/assets/2018-08-05-apache-ignite-hibernate-l2-cache/Electronic_Store_Architecture_1.png" | absolute_url }})
 
 We can easily see this, first of all, when we start the instances: in the logs, we see messages like this:
 
@@ -394,7 +403,7 @@ So, when we started the ElectronicStore instances, the Ignite clients connected 
 
 Now, the cluster looks like this:
 
-![Project structure]({{ "/assets/2018-08-05-apache-ignite-hibernate-l2-cache/electronic_store_one_server_in_cluster.png" | absolute_url }})
+![Project structure]({{ "/assets/2018-08-05-apache-ignite-hibernate-l2-cache/Electronic_Store_Architecture_2.png" | absolute_url }})
 
 Ok, now we are ready to repeat the experiment. We will see:
 

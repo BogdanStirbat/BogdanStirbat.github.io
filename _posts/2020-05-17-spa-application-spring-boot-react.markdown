@@ -203,10 +203,6 @@ Home page for an regular user:
 
 ![Project structure]({{ "/assets/2020-05-17-spa-application-spring-boot-react/front_page_regular_user.png" | absolute_url }})
 
-Home page for an regular user:
-
-![Project structure]({{ "/assets/2020-05-17-spa-application-spring-boot-react/front_page_regular_user.png" | absolute_url }})
-
 Supermarket view for an regular user:
 
 ![Project structure]({{ "/assets/2020-05-17-spa-application-spring-boot-react/supermarkets_regular_user.png" | absolute_url }})

@@ -5,8 +5,6 @@ date:   2022-03-31 12:16:18 +0300
 categories: jekyll update
 ---
 
-The [AMQP 0-9-1](https://www.rabbitmq.com/tutorials/amqp-concepts.html) 
-
 ### Introduction
 
 [RabbitMQ](https://www.rabbitmq.com) is one of the most used open source message broker. In this blog post I will make 

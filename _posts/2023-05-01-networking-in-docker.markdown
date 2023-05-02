@@ -129,6 +129,8 @@ We can observe that the network of the `web_host` container is shared with the h
 ### Conclusions
 Containers in the same network take the IP address from the same IP space, and are accessible by the IP address.
 
+Containers that run in the same user-defined network are also accessible by the container name. 
+
 A container on the host network shares the same network as the host operating system's network.
 
 ### Links
